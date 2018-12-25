@@ -360,6 +360,17 @@ help(const char *progname)
 	printf(_("  -T                 send SIGSTOP to all backend processes if one dies\n"));
 	printf(_("  -W NUM             wait NUM seconds to allow attach from a debugger\n"));
 
+	/*
+	 * The postgres command can also be called in single-user mode. The primary use for this mode is during
+	 * bootstrapping by initdb. Sometimes it is used for debugging or disaster recovery; note that running
+	 * a single-user server is not truly suitable for debugging the server, since no realistic interprocess
+	 * communication and locking will happen. When invoked in single-user mode from the shell, the user can
+	 * enter queries and the results will be printed to the screen, but in a form that is more useful for
+	 * developers than end users. In the single-user mode, the session user will be set to the user with
+	 * ID 1, and implicit superuser powers are granted to this user. This user does not actually have to
+	 * exist, so the single-user mode can be used to manually recover from certain kinds of accidental
+	 * damage to the system catalogs.
+	 * */
 	printf(_("\nOptions for single-user mode:\n"));
 	printf(_("  --single           selects single-user mode (must be first argument)\n"));
 	printf(_("  DBNAME             database name (defaults to user name)\n"));
